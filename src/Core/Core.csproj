@@ -48,6 +48,7 @@
     <Compile Include="ConfigurationElement.cs" />
     <Compile Include="Configuration\ConfigReader.cs" />
     <Compile Include="Configuration\ConfigurationExpression.cs" />
+    <Compile Include="Configuration\PipelineConfiguration.cs" />
     <Compile Include="Configuration\PipelineElement.cs" />
     <Compile Include="Configurer.cs" />
     <Compile Include="IConfigurationElement.cs" />
