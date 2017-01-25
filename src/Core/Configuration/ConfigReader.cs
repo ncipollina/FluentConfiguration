@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,11 +16,27 @@ namespace CapTech.FluentConfiguration.Core.Configuration
             base.LoadAutoIncludeFiles(element);
             var configPatcher = GetConfigPatcher(element);
 
-            var pipeline = @"<configuration><sitecore><testStuff></testStuff></sitecore></configuration>";
+            //var pipeline = @"<configuration><sitecore><testStuff></testStuff></sitecore></configuration>";
 
-            pipeline = new PipelineElement().OutputXml();
+            var registrationClass = ConfigurationManager.AppSettings["FluentConfiguration.Registration"];
 
-            configPatcher.ApplyPatch(new StringReader(pipeline), "FluentConfiguration");
+            if (!string.IsNullOrEmpty(registrationClass))
+            {
+                var type = Type.GetType(registrationClass);
+
+                if (type != null)
+                {
+                    var method = type.GetMethod("RegisterConfigurations");
+
+                    if (method != null)
+                    {
+                        method.Invoke(null, null);
+                        var configPatch = Configurer.Instance.ToString();
+
+                        configPatcher.ApplyPatch(new StringReader(configPatch), "FluentConfiguration");
+                    }
+                }
+            }
         }
     }
 }

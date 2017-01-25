@@ -1,21 +1,28 @@
 ﻿using CapTech.FluentConfiguration.Core.Configuration;
+using CapTech.FluentConfiguration.Core.Helpers;
+using CapTech.FluentConfiguration.Core.Xml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace CapTech.FluentConfiguration.Core
 {
-    public class Configurer : IConfigurer
+    public class Configurer : XElement
     {
-        private static volatile IConfigurer _instance;
+        private static volatile Configurer _instance;
         private static object syncRoot = new object();
 
-        private readonly IList<PipelineConfiguration> _pipelineConfigs = new List<PipelineConfiguration>();
+        private readonly XElement _sitecoreElement = new XElement("sitecore");
 
-        private Configurer() { }
-        public static IConfigurer Instance
+        private Configurer() : base("configuration")
+        {
+            Add(new XAttribute(XNamespace.Xmlns + "patch", Constants.PATCH),
+                _sitecoreElement);
+        }
+        public static Configurer Instance
         {
             get
             {
@@ -35,16 +42,19 @@ namespace CapTech.FluentConfiguration.Core
             private set { _instance = value; }
         }
 
+        private PipelineSection _pipelines;
 
-        public void AddPipeline(PipelineConfiguration pipelineConfig)
+        public PipelineSection Pipelines
         {
-            _pipelineConfigs.Add(pipelineConfig);
-        }
-
-
-        public void AddPipeline<TPipeline>(TPipeline pipelineConfig) where TPipeline : PipelineConfiguration, new()
-        {
-            AddPipeline(pipelineConfig);
+            get
+            {
+                if (_pipelines == null)
+                {
+                    _pipelines = new PipelineSection();
+                    _sitecoreElement.Add(_pipelines);
+                }
+                return _pipelines;
+            }
         }
     }
 }
