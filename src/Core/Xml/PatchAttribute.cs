@@ -8,10 +8,10 @@ using System.Xml.Linq;
 
 namespace CapTech.FluentConfiguration.Core.Xml
 {
-    public class PatchInsteadAttribute : PatchAttribute
+    public abstract class PatchAttribute : XAttribute
     {
-        public PatchInsteadAttribute(string insteadType) :
-            base("instead", insteadType)
+        public PatchAttribute(string patch, string type) :
+            base(Constants.PATCH + patch, string.Format("processor[@type='{0}']", type))
         { }
     }
 }
