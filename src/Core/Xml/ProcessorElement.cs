@@ -19,20 +19,20 @@ namespace CapTech.FluentConfiguration.Core.Xml
             Add(new TypeAttribute(typeName));
         }
 
-        public ProcessorElement PatchInstead(string insteadType)
+        public ProcessorElement InsteadOf(string insteadType)
         {
             Add(new PatchInsteadAttribute(insteadType));
             return this;
         }
 
-        public ProcessorElement PatchInstead(Type insteadType)
+        public ProcessorElement InsteadOf(Type insteadType)
         {
-            return PatchInstead(insteadType.GetTypeName());
+            return InsteadOf(insteadType.GetTypeName());
         }
 
-        public ProcessorElement PatchInstead<TAttribute>()
+        public ProcessorElement InsteadOf<TAttribute>()
         {
-            return PatchInstead(typeof(TAttribute));
+            return InsteadOf(typeof(TAttribute));
         }
     }
 }
