@@ -11,13 +11,13 @@ namespace CapTech.FluentConfiguration.Core.Xml
     {
         public PipelineSection(): base("pipelines") { }
 
-        public void AddPipeline(PipelineElement pipelineConfig)
+        public void AddPipeline(params PipelineElement[] pipelineConfig)
         {
             Add(pipelineConfig);
         }
 
 
-        public void AddPipeline<TPipeline>(TPipeline pipelineConfig) where TPipeline : PipelineElement, new()
+        public void AddPipeline<TPipeline>(params TPipeline[] pipelineConfig) where TPipeline : PipelineElement, new()
         {
             AddPipeline(pipelineConfig);
         }

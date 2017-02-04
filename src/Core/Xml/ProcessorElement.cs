@@ -34,5 +34,37 @@ namespace CapTech.FluentConfiguration.Core.Xml
         {
             return InsteadOf(typeof(TAttribute));
         }
+
+        public ProcessorElement After(string afterType)
+        {
+            Add(new PatchAfterAttribute(afterType));
+            return this;
+        }
+
+        public ProcessorElement After(Type afterType)
+        {
+            return After(afterType.GetTypeName());
+        }
+
+        public ProcessorElement After<TAttribute>()
+        {
+            return After(typeof(TAttribute));
+        }
+
+        public ProcessorElement Before(string beforeType)
+        {
+            Add(new PatchBeforeAttribute(beforeType));
+            return this;
+        }
+
+        public ProcessorElement Before(Type beforeType)
+        {
+            return Before(beforeType.GetTypeName());
+        }
+
+        public ProcessorElement Before<TAttribute>()
+        {
+            return Before(typeof(TAttribute));
+        }
     }
 }
